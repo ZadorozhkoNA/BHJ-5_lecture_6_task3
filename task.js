@@ -2,6 +2,7 @@ let arrayProducts = document.body.querySelectorAll( '.product' );
 let cart = document.body.querySelector( '.cart__products' );
 
 function addProduct( id, src, count, element ) {
+  count = parseInt( count );
   let cartProducts = document.body.querySelectorAll( '.cart__product' );
   let searchProduct = true;
 
@@ -25,30 +26,10 @@ function addProduct( id, src, count, element ) {
     divCart.appendChild( img );
     divCart.appendChild( divCount );
     element.appendChild( divCart );
-  }
-}
-
-function countProduct( id, count, element ) {
-  let array =[];
-  array = element.querySelectorAll( '.cart__product' );
-  if ( array ) {
-    array.forEach( (item) => {
-      if ( item.dataset.id === id ) {
-        item.querySelector( '.cart__product-count' ).textContent = count;
-      }
-    });
-  }
-}
-
-function delProduct( id, element) {
-  let array =[];
-  array = element.querySelectorAll( '.cart__product' );
-  if ( array ) {
-    array.forEach( (item) => {
-      if ( item.dataset.id === id ) {
-        element.removeChild( item );
-      }
-    });
+  } else {
+    let divCart = element.querySelector( `[data-id="${id}"]` );
+    let countCart = parseInt( divCart.querySelector( '.cart__product-count' ).textContent );
+    divCart.querySelector( '.cart__product-count' ).textContent = count + countCart;
   }
 }
 
@@ -64,17 +45,12 @@ function selectProduct( event ) {
 
   if ( event.target === event.currentTarget.querySelector( '.product__quantity-control_inc' ) ) {
     count++;
-    countProduct( id, count, cart );
     event.currentTarget.querySelector( '.product__quantity-value' ).textContent = count;
   }
 
   if ( event.target === event.currentTarget.querySelector( '.product__quantity-control_dec' ) ) {
     count--;
-    if ( count === 0 ) {
-      count = 1;
-      delProduct( id, cart);
-    }
-    countProduct( id, count, cart );
+    if ( count === 0 ) count = 1;
     event.currentTarget.querySelector( '.product__quantity-value' ).textContent = count;
   }
 }
